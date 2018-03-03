@@ -1,0 +1,32 @@
+Metadata-Version: 1.1
+Name: BlastOff
+Version: 0.1+g5adb9d4.dirty
+Summary: Add a short description here!
+Home-page: http://...
+Author: [12NaN]
+Author-email: [frank.orefice25@students.kbcc.cuny.edu]
+License: mit
+Description-Content-Type: UNKNOWN
+Description: ========
+        BlastOff
+        ========
+        
+        
+        Add a short description here!
+        
+        
+        Description
+        ===========
+        
+        A longer description of your project goes here...
+        
+        
+        Note
+        ====
+        
+        This project has been set up using PyScaffold 3.0.1. For details and usage
+        information on PyScaffold see http://pyscaffold.org/.
+        
+Platform: any
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python

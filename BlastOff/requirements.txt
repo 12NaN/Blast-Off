@@ -1,0 +1,7 @@
+# Add your pinned requirements so that they can be easily installed with:
+# pip install -r requirements.txt
+# Remember to also add them in setup.cfg but unpinned.
+ pandas==0.22.0
+ selenium==3.9.0
+ xlrd==1.1.0
+

@@ -1,0 +1,5 @@
+
+[console_scripts]
+# script_name = blastoff.module:function
+# For example:
+# fibonacci = blastoff.skeleton:run
