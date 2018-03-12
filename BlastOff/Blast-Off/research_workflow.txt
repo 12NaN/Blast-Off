@@ -1,0 +1,20 @@
+StaphBrowser Annotation workflow
+
+Starting with a BLAST result summary (.blast file)
+
+1. Select a blast result file, make a folder for this gene
+2. Open the file in Excel, sort by %query coverage (col-E) and  %identity (col-D)
+3. Count the rows – are there matches for all 161 genomes?
+4. Look at the worst matches – test by blastp
+	https://blast.ncbi.nlm.nih.gov/
+5. Decide at what level of %identity should be the cutoff for the same gene (orthologs)
+6. Look at short fragment matches with blastp – trace back to genome assembly, make protein>DNA Blast (tblastn)
+7. Count total number of alleles
+8. Download list of all matching proteins, save as text file
+9. Upload list to Batch ENTREZ, download FASTA file of protein sequences – save!
+	https://www.ncbi.nlm.nih.gov/sites/batchentrez
+10. Upload FASTA file to EBI Clustal, save text file of multiple alignment
+	https://www.ebi.ac.uk/Tools/msa/clustalo
+11. Upload multiple alignment to EMBOSS>showalign, save text file of simplified mult-alignment.
+http://www.bioinformatics.nl/cgi-bin/emboss/showalign
+12. Fill out Ortholog Report form, save all relevant files to the folder for this gene. Submit completed folders to Professor Brogun
