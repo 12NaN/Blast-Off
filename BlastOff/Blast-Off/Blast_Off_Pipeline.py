@@ -54,19 +54,20 @@ class Ortholog_Report():
             
         return; # Exits the function.
     
-    def get_allele_frequency(sheet, identity, match): # Gets the number of alleles in the Excel file.
+    def get_allele_frequency(sheet, identity, df): # Gets the number of alleles in the Excel file.
         
         global report;
-        
-        alleles = 0;
+        match = 0;
         for row in range(sheet.nrows): # Checks the Excel file for the number of alleles.
             if sheet.cell_value(row, 3) >= identity:
-                alleles = alleles + 1;
-        
+               match = match + 1;
+               identity_count = df['d'].value_counts().to_dict();
+               
+        alleles = len(identity_count);
         report.write("\ngenomes_matched: " + str(match) + "\nIdentity_threshold: " + str(identity) + "\nalleles: " + str(alleles)); # Writes to the ortholog report.
-        return Ortholog_Report.list_of_matching_protein(sheet);
+        return Ortholog_Report.list_of_matching_protein(sheet, identity);
      
-    def list_of_matching_protein(sheet):
+    def list_of_matching_protein(sheet, identity):
         
         global driver;
         match_file = input("\nEnter the name you want to use for the list of matching proteins: "); # Name the list of matching proteins.
@@ -77,7 +78,9 @@ class Ortholog_Report():
         matches = open(match_file, 'w+'); # Creates the file for the list of matching proteins and makes it both readable and writable.
             
         for row in range(sheet.nrows): # Writes the list of matching to a text file.
-            matches.write("\n" + str(sheet.cell_value(row, 1)));
+            if sheet.cell_value(row, 3) >= identity:
+                matches.write("\n" + str(sheet.cell_value(row, 1)));
+                
         matches.close();
         
         file_directory = open("default_directory.txt", 'r'); # Opens the default directory text file as readable.
@@ -135,7 +138,8 @@ class files():
         if os.path.exists('default_directory.txt'): # Checks if the default directory text file exists.
             default = open('default_directory.txt', 'r'); # Opens the default directory text file as readable.
             print("\nThe current default directory is: " + str(default.read())); # Prints the name of the default directory.
-        
+            default.close(); # Closes the text file.
+
         else: # If the default directory text file doesn't exist.
             print("\nThe current directory is: " + str(os.getcwd())); # Prints the current working directory instead.
         
@@ -145,8 +149,7 @@ class files():
             os.chdir(change); # Changes the directory.
         elif os.path.exists(change) == False: # If the directory doesn't exist.
             print("\nThis directory doesn't exist...");
-        
-        default.close(); # Closes the text file.
+
         return;
                 
     def make_folder():
@@ -194,6 +197,7 @@ class excel_manipulation():
         work = workbook.sheet_by_name(worksheet) # Access sheet 0.
             
         df = pd.read_excel(xl, worksheet); # Reads the Excel file.
+        df.columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
         genomes = len(df)+1; # The number of genomes start at 1.
 
         print("\nThis excel file contains " + str(genomes) + " rows."); # Prints the number of genomes.
@@ -208,7 +212,7 @@ class excel_manipulation():
         
         cut_off = input("\nPlease enter the cutoff: ");
         cut_off = float(cut_off); # Changes the cut off to a float.
-        Ortholog_Report.get_allele_frequency(work, cut_off, genomes);
+        Ortholog_Report.get_allele_frequency(work, cut_off, df);
                 
 
     def choose_excel_file():
@@ -298,18 +302,30 @@ class workflow():
         
         global driver;
         
-        try: # Attempts to open the web page using Firefox.
-            driver = webdriver.Firefox();
-            driver.get(link);
+        browser = input("\nDo you want to use: \n1) Google Chrome\n2) Firefox\n:");
 
-        except (SessionNotCreatedException, NoSuchWindowException, WebDriverException) as error: # Error handling.
-                try: # If any of these above errors occur, then Google Chrome will be used.
-                    driver = webdriver.Chrome(executable_path=r"chromedriver.exe");
-                    driver.get(link);
-                except (SessionNotCreatedException, NoSuchWindowException, WebDriverException, InvalidArgumentException) as error: # Error handling.
-                    print("\nThe webpage was unable to be open. The link to the website is: " + link); # Prints out if none of the browsers work.
-                    input("\nCopy and paste the link into your webbrowser and complete this step manually. Press enter once this step is completed");
-                    pass;
+        if browser == '1':
+            try: # If any of these above errors occur, then Google Chrome will be used.
+                driver = webdriver.Chrome(executable_path=r"chromedriver.exe");
+                driver.get(link);
+            except (SessionNotCreatedException, NoSuchWindowException, WebDriverException, InvalidArgumentException) as error: # Error handling.
+                print("\nThe webpage was unable to be open. The link to the website is: " + link); # Prints out if none of the browsers work.
+                input("\nCopy and paste the link into your webbrowser and complete this step manually. Press enter once this step is completed");
+                pass;
+
+        elif browser == '2':
+            try: # Attempts to open the web page using Firefox.
+                driver = webdriver.Firefox();
+                driver.get(link);
+
+            except (SessionNotCreatedException, NoSuchWindowException, WebDriverException, InvalidArgumentException) as error: # Error handling.
+                print("\nThe webpage was unable to be open. The link to the website is: " + link); # Prints out if none of the browsers work.
+                input("\nCopy and paste the link into your webbrowser and complete this step manually. Press enter once this step is completed");
+                pass;
+            
+        else:
+            print("\nThat isn't an option. Try again.");
+            workflow.choose_browser();
                 
     def blast(cell1, cell2):
         
@@ -375,6 +391,21 @@ class workflow():
             print("\nError, we are unable to upload the data. You must do it manually.")
             input("\nPress enter to continue once the step is completed.");
             pass;
+
+"""    def choose_browser():
+        browser = input("\nDo you want to use: \n1) Google Chrome\n2) Firefox\n:");
+
+        if browser == '1':
+            
+
+        elif browser == '2':
+            
+
+        else:
+            print("\nThat isn't an option. Try again.");
+            workflow.choose_browser(); """
+            
+            
             
 def main(): # Main menu 
     choice = input("\n\nBlast-Off *\n------------\n1)Start\n2)Set default directory\n3)View Research Workflow\n4)Create a folder\n5)Exit\n");
