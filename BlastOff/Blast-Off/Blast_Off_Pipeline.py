@@ -274,7 +274,7 @@ class workflow():
             if choice == 'y' or choice == 'Y':
                 cont = 1; # Exits the loop
                 Ortholog_Report.report(); # Creates the ortholog report
-                excel_manipulation.choose_excel_file();  # Chhose an Excel file.
+                excel_manipulation.choose_excel_file();  # Choose an Excel file.
             
             elif choice == 'n' or choice == 'N':
                 files.change_directory(); # Allows the user to change the directory.
@@ -408,7 +408,14 @@ class workflow():
             
             
 def main(): # Main menu 
-    choice = input("\n\nBlast-Off *\n------------\n1)Start\n2)Set default directory\n3)View Research Workflow\n4)Create a folder\n5)Exit\n");
+    print("  __   __        __      ____   _____        ______  _____  ______\n",
+    "|  \ |  |      /  \    /   _| |_   _| ___  |  __  || ____/| ____/ \n",
+    "|--< |  |__   / /\ \   \  \     | |  |___| | |__| || ___/ | ____/ \n",
+    "|__/ |_____| / /  \ \ /____\    | |	    |______||_|    |_| \n",
+    "-----------------------------------------------------------------")
+    
+
+    choice = input("1)Start\n2)Set default directory\n3)View Research Workflow\n4)Create a folder\n5)Exit\nSelect: ");
 
     if choice == '1':
         workflow.working_directory(); # Starts the program.
