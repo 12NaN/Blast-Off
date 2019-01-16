@@ -2,20 +2,19 @@
 import os, webbrowser, pandas as pd, xlrd;  # Allows access to os commands, opening text files and manipulating Excel files
 from selenium import webdriver; # Accesses the webdriver to open the web browser.
 from selenium.webdriver.support.ui import Select;
-from selenium.webdriver import Firefox
 from selenium.common.exceptions import NoSuchWindowException; # Here and below are exceptions that the program will catch.
 from selenium.common.exceptions import WebDriverException;
 from selenium.common.exceptions import SessionNotCreatedException;
 from selenium.common.exceptions import InvalidArgumentException;
 
-class Ortholog_Report():
+class Ortholog_Report:
     
     def report(): # Creates the ortholog report.
         
         global report, report_name;
         
         report_name = input("\nEnter the name you want to use for the ortholog report: ");
-        if report_name.endswith != '.txt': # Appends .txt to make the file into a text file.
+        if(report_name.endswith != '.txt'): # Appends .txt to make the file into a text file.
             report_name = report_name + '.txt';
         
         create_report = open(report_name, 'w'); # Creates the file and makes it writable.
@@ -44,9 +43,9 @@ class Ortholog_Report():
         sequence = id_file[0:10]; # Shortens the name of the Excel file to make the default gene ID.
         choice = input("\nDo you want the gene name to be " + sequence + "? Enter(y/n): "); # Asks the user if they want to use the default name.
         
-        if choice == 'y' or choice == 'Y': # Keeps the default name.
+        if(choice == 'y' or choice == 'Y'): # Keeps the default name.
             report.write("geneID: " + sequence + "\ngeneName: "); # Writes the gene ID into the ortholog report.
-        elif choice == 'n' or 'N': # Allows the user to create their own default name.
+        elif(choice == 'n' or 'N'): # Allows the user to create their own default name.
             sequence = input("\nEnter the gene name: ");
             report.write("geneID: " + sequence + "\ngeneName: "); # Writes the gene ID into the ortholog report.
         else: # Input validation.
@@ -59,7 +58,7 @@ class Ortholog_Report():
         global report;
         match = 0;
         for row in range(sheet.nrows): # Checks the Excel file for the number of alleles.
-            if sheet.cell_value(row, 3) >= identity:
+            if(sheet.cell_value(row, 3) >= identity):
                match = match + 1;
                identity_count = df['d'].value_counts().to_dict();
                
@@ -72,13 +71,13 @@ class Ortholog_Report():
         global driver;
         match_file = input("\nEnter the name you want to use for the list of matching proteins: "); # Name the list of matching proteins.
         
-        if match_file.endswith != '.txt':  # Adds the extension .txt if it isn't there already.
+        if(match_file.endswith != '.txt'):  # Adds the extension .txt if it isn't there already.
            match_file = match_file + '.txt';
         
         matches = open(match_file, 'w+'); # Creates the file for the list of matching proteins and makes it both readable and writable.
             
         for row in range(sheet.nrows): # Writes the list of matching to a text file.
-            if sheet.cell_value(row, 3) >= identity:
+            if(sheet.cell_value(row, 3) >= identity):
                 matches.write("\n" + str(sheet.cell_value(row, 1)));
                 
         matches.close();
@@ -94,23 +93,23 @@ class Ortholog_Report():
         return Ortholog_Report.review(); # Review and finish the ortholog report.
         
         
-class files():
+class files:
     
     def set_default_directory():
         
         choice = input("\nDo you want to set a default directory? (y/n): ")
         if choice == 'y' or choice == 'Y':
-            if os.path.exists('default_directory.txt') and os.stat('default_directory.txt').st_size != 0: # Checks if the file exists and if it is not empty.
+            if(os.path.exists('default_directory.txt') and os.stat('default_directory.txt').st_size != 0): # Checks if the file exists and if it is not empty.
                 default = open('default_directory.txt', 'r+'); # Opens the default directory text file as readable.
                 print("The current default directory is: " + str(default.read())); # Prints the name of the default directory.
-            elif os.path.exists('default_directory.txt') and os.stat('default_directory.txt').st_size == 0: # Checks if the file exists and if it is empty.
+            elif(os.path.exists('default_directory.txt') and os.stat('default_directory.txt').st_size == 0): # Checks if the file exists and if it is empty.
                 default = open('default_directory.txt', 'r+'); # Opens the default directory text file as readable.
                 print("\nThere is no default directory."); # Prints that there is no default directory.
             else: # If the default directory text file doesn't exist.
                 default = open('default_directory.txt', 'w+'); # Creates the default directory text file.
                 print("\nThere is no default directory."); # Prints taht there is no default directory.
         
-        elif choice == 'n' or choice == 'N': # Returns to the main menu.
+        elif(choice == 'n' or choice == 'N'): # Returns to the main menu.
             print("\nReturning to the main menu.\n");
             return main();
         
@@ -120,7 +119,7 @@ class files():
             
         change = input("\nPlease enter the default directory you want to use: "); # Asks the user to enter what directory they want to use.
 
-        if os.path.exists(change) == True: # Checks if the directory exists.
+        if(os.path.exists(change) == True): # Checks if the directory exists.
             os.chdir(change); # Changes the directory.
             default.seek(0); # Reads the whole text file.
             default.truncate(); # Erases the data in the text file.
@@ -135,7 +134,7 @@ class files():
         
     def change_directory():
         
-        if os.path.exists('default_directory.txt'): # Checks if the default directory text file exists.
+        if(os.path.exists('default_directory.txt')): # Checks if the default directory text file exists.
             default = open('default_directory.txt', 'r'); # Opens the default directory text file as readable.
             print("\nThe current default directory is: " + str(default.read())); # Prints the name of the default directory.
             default.close(); # Closes the text file.
@@ -145,9 +144,9 @@ class files():
         
         change = input("\nPlease enter the directory you want to use: "); # Asks the user what directory they want to use.
 
-        if os.path.exists(change) == True: # Checks if the directory exists.
+        if(os.path.exists(change) == True): # Checks if the directory exists.
             os.chdir(change); # Changes the directory.
-        elif os.path.exists(change) == False: # If the directory doesn't exist.
+        elif(os.path.exists(change) == False): # If the directory doesn't exist.
             print("\nThis directory doesn't exist...");
 
         return;
@@ -156,16 +155,16 @@ class files():
         
         choice = input("\nDo you want to create folder in a different directory? (y/n): "); # Asks the user if they want to create the folder in a different directory.
         
-        if choice == 'y' or choice == 'Y': # Changes the directory.
+        if(choice == 'y' or choice == 'Y'): # Changes the directory.
             files.change_directory();
-        elif choice == 'n' or choice == 'N': # Remain the current directory.
+        elif(choice == 'n' or choice == 'N'): # Remain the current directory.
             print("\nThe file will me made in the current directory: " + str(os.getcwd())  + "\n"); # Prints the name of the current working directory.
             
         name = input("\nPlease enter the name of the folder: "); # Enter the name of the folder.
 
-        if name == 'm' or name == 'M': # To return to the main menu.
+        if(name == 'm' or name == 'M'): # To return to the main menu.
             print("\nReturning to the main menu.");
-        elif not os.path.exists(name): # If the folder doesn't already exist, create the folder.
+        elif(not os.path.exists(name)): # If the folder doesn't already exist, create the folder.
             os.makedirs(name);
         else: # If the folder already exists.
             print("\nThat folder already exists in this directory!");
@@ -174,7 +173,7 @@ class files():
     
     def open_text_file(file_name):
         
-        if os.path.exists(file_name) == True: # If the file exists, open it.
+        if(os.path.exists(file_name) == True): # If the file exists, open it.
             webbrowser.open(file_name);
         else: 
             print("\nThis file doesn't exist...");
@@ -185,7 +184,7 @@ class files():
         
         print("\nThis directory contains: " + str(os.listdir()));
 
-class excel_manipulation():
+class excel_manipulation:
     
     def load_excel_file(file):
         
@@ -219,17 +218,17 @@ class excel_manipulation():
         
         file = input("\nWhich file do you want to open in Microsoft excel (include the extention 'xlsx')? Enter wd to return to the previous step or v to view the contents of the directory: ");
         
-        if os.path.exists(file):# and file.endswith == '.xlsx':
+        if(os.path.exists(file)):# and file.endswith == '.xlsx':
             print("\nYou entered: " + file);
         
-        elif os.path.exists(file) == False and os.path.exists(file + ".xlsx") == True: # If the given file doesn't exist, but it does with the extension added.
+        elif(os.path.exists(file) == False and os.path.exists(file + ".xlsx") == True): # If the given file doesn't exist, but it does with the extension added.
             file = file + ".xlsx";
             print("\nYou entered: " + file);
             
-        elif file == 'wd': # Go back and change the directory.
+        elif(file == 'wd'): # Go back and change the directory.
             return workflow.working_directory();
             
-        elif file == 'v': # View the contents of the current directory.
+        elif(file == 'v'): # View the contents of the current directory.
             files.view_directory();
             excel_manipulation.choose_excel_file();
             
@@ -239,9 +238,10 @@ class excel_manipulation():
             
         choice = input("\nIs this correct? Enter(y/n): ");
 
-        if choice == 'y' or choice == 'Y': # if it is the right file.
+        if(choice == 'y' or choice == 'Y'): # if it is the right file.
             Ortholog_Report.gene_ID(file); # Give Gene ID.
-        elif choice == 'n' or choice == 'N': # If it is not the right file.
+            
+        elif(choice == 'n' or choice == 'N'): # If it is not the right file.
             print("\nTry again.");
             excel_manipulation.choose_excel_file(); # Retry.
             
@@ -251,12 +251,12 @@ class excel_manipulation():
             
         return excel_manipulation.load_excel_file(file);
 
-class workflow():
+class workflow:
     
     def working_directory():
         
         cont = 0;
-        if os.path.exists('default_directory.txt') and os.stat('default_directory.txt').st_size != 0: # Checks if the default directory file exists and if its not empty.
+        if(os.path.exists('default_directory.txt') and os.stat('default_directory.txt').st_size != 0): # Checks if the default directory file exists and if its not empty.
             default = open('default_directory.txt', 'r'); # Open the default directory file as read.
             os.chdir(str(default.read())); # Reads the default directory text file and change the directory to the default directory.
         else:
@@ -271,26 +271,26 @@ class workflow():
                   " enter(m). To view items in this directory, enter(v). To create a folder, enter(mf). To view the workflow, enter(wf).");
             choice = input("\nDo you want to work in this directory? Enter(y/n): ");
         
-            if choice == 'y' or choice == 'Y':
+            if(choice == 'y' or choice == 'Y'):
                 cont = 1; # Exits the loop
                 Ortholog_Report.report(); # Creates the ortholog report
                 excel_manipulation.choose_excel_file();  # Choose an Excel file.
             
-            elif choice == 'n' or choice == 'N':
+            elif(choice == 'n' or choice == 'N'):
                 files.change_directory(); # Allows the user to change the directory.
             
-            elif choice == 'm' or choice == 'M': # Return to the main menu.
+            elif(choice == 'm' or choice == 'M'): # Return to the main menu.
                 cont = 1; # Exit the loop
                 return main(); # Return to the main menu.
             
-            elif choice == 'v' or choice == 'V': # View the contents of the current directory.
+            elif(choice == 'v' or choice == 'V'): # View the contents of the current directory.
                 files.view_directory(); # Shows current directory
                 workflow.working_directory(); # Starts at the beginning of the function.
            
-            elif choice == 'mf':
+            elif(choice == 'mf'):
                 files.make_folder(); # Creates a new folder.
             
-            elif choice == 'wf':
+            elif(choice == 'wf'):
                 files.open_text_file("research_workflow.txt"); # Opens the workflow textfile.
             
             else:
@@ -304,7 +304,7 @@ class workflow():
         
         browser = input("\nDo you want to use: \n1) Google Chrome\n2) Firefox\n:");
 
-        if browser == '1':
+        if(browser == '1'):
             try: # If any of these above errors occur, then Google Chrome will be used.
                 driver = webdriver.Chrome(executable_path=r"chromedriver.exe");
                 driver.get(link);
@@ -313,7 +313,7 @@ class workflow():
                 input("\nCopy and paste the link into your webbrowser and complete this step manually. Press enter once this step is completed");
                 pass;
 
-        elif browser == '2':
+        elif(browser == '2'):
             try: # Attempts to open the web page using Firefox.
                 driver = webdriver.Firefox();
                 driver.get(link);
@@ -355,9 +355,9 @@ class workflow():
         
         alignment = input("\nOnce you've completed step 9, enter the name of the FASTA file: "); # Input the FASTA file.
         
-        if os.path.exists(alignment): # Checks if the file exists.
+        if(os.path.exists(alignment)): # Checks if the file exists.
             print("\nYou entered: " + alignment); # Prints the file name.
-        elif os.path.exists(alignment) == False and os.path.exists(alignment + '.fasta'): # Adds the .fasta extension if it isn't already there.
+        elif(os.path.exists(alignment) == False and os.path.exists(alignment + '.fasta')): # Adds the .fasta extension if it isn't already there.
             alignment = alignment + '.fasta'; 
         else: # Input validation.
             print("\nThis file doesn't exist. Try again.");
@@ -376,9 +376,9 @@ class workflow():
     def show_align(key):
         show_align = input("\nEnter the name of the multiple alignment file that you want to show align: ")
         
-        if os.path.exists(show_align): # Checks if the file exists.
+        if(os.path.exists(show_align)): # Checks if the file exists.
             print("\nYou entered: " + show_align); # Prints the files name.
-        elif os.path.exists(show_align) == False and os.path.exists(show_align + '.txt'): # Adds the .txt extension if it isn't already there.
+        elif(os.path.exists(show_align) == False and os.path.exists(show_align + '.txt')): # Adds the .txt extension if it isn't already there.
             show_align = show_align + '.txt';
         else: # Input validation.
             print("\nThis file doesn't exist. Try again.");
@@ -391,19 +391,6 @@ class workflow():
             print("\nError, we are unable to upload the data. You must do it manually.")
             input("\nPress enter to continue once the step is completed.");
             pass;
-
-"""    def choose_browser():
-        browser = input("\nDo you want to use: \n1) Google Chrome\n2) Firefox\n:");
-
-        if browser == '1':
-            
-
-        elif browser == '2':
-            
-
-        else:
-            print("\nThat isn't an option. Try again.");
-            workflow.choose_browser(); """
             
             
             
@@ -417,15 +404,15 @@ def main(): # Main menu
 
     choice = input("1)Start\n2)Set default directory\n3)View Research Workflow\n4)Create a folder\n5)Exit\nSelect: ");
 
-    if choice == '1':
+    if(choice == '1'):
         workflow.working_directory(); # Starts the program.
-    elif choice == '2':
+    elif(choice == '2'):
         files.set_default_directory(); # Setting the default directory.
-    elif choice == '3':
+    elif(choice == '3'):
         files.open_text_file("research_workflow.txt"); # Opens the workflow text file.
-    elif choice == '4':
+    elif(choice == '4'):
         files.make_folder(); # Creates a new folder in the current directory.
-    elif choice == '5':
+    elif(choice == '5'):
         exit(0); #Exits the program.
     else:
         print("That isn't an option! Try again."); # Input validation.
